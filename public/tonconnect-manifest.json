@@ -1,7 +1,7 @@
 {
-    "url": "https://localhost:3000/",                        
+    "url": "https://ton-dapp-pi.vercel.app/",                        
     "name": "Dapp",                   
-    "iconUrl": "https://localhost:3000/",               
-    "termsOfUseUrl": "https://localhost:3000/",    
-    "privacyPolicyUrl": "https://localhost:3000/" 
+    "iconUrl": "https://ton-dapp-pi.vercel.app/",               
+    "termsOfUseUrl": "https://ton-dapp-pi.vercel.app/",    
+    "privacyPolicyUrl": "https://ton-dapp-pi.vercel.app/" 
   }

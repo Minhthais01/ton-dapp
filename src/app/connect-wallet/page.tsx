@@ -9,7 +9,7 @@ import BalanceUI from '../components/balance/page';
 const ConnectWallet = () => {
   
   return (
-    <TonConnectUIProvider manifestUrl='https://localhost:3000/tonconnect-manifest.json'>
+    <TonConnectUIProvider manifestUrl='https://ton-dapp-pi.vercel.app/tonconnect-manifest.json'>
       <h1>Hello, Youtube</h1>
       <div style={{ "padding": '10rem' }}>
         <TonConnectButton />
