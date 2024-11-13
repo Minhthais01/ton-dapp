@@ -31,7 +31,7 @@ export default function Product() {
     const fetchProducts = async () => {
       setLoading(true); // Ensure loading is true when fetching starts
       try {
-        const response = await fetch('http://localhost:5000/nfts', {
+        const response = await fetch('https://ton-dapp-two.vercel.app/db.json', {
           method: 'GET',
           headers: {
             'Cache-Control': 'no-cache', // Disable caching for fresh data
