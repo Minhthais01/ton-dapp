@@ -1,9 +1,11 @@
 // import Image from "next/image";
 
-import ConnectWallet from "./connect-wallet/page";
+import Product from "./product/page";
+
+
 
 export default function Home() {
   return (
-    <ConnectWallet></ConnectWallet>
+    <Product></Product>
   );
 }

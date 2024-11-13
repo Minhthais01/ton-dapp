@@ -1,0 +1,83 @@
+/* Basic reset for box-sizing */
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 4rem;
+  background-color: white;
+  color: #333;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.connectButton {
+  /* background-color: #007bff; */
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* .connectButton:hover {
+  background-color: #0056b3;
+} */
+
+/* Search bar styling */
+.searchBar {
+  height: 45px;
+  /* width: 100%; */
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 0.5rem;
+  background-color: #f9f9f9;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  color: #333;
+  background-color: transparent;
+}
+
+.searchIcon {
+  position: absolute;
+  right: 1rem;
+  color: #888;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+
+  .nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
