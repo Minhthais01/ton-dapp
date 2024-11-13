@@ -28,13 +28,18 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
 
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/nfts/${id}`);
+        const response = await fetch(`https://ton-dapp-two.vercel.app/db.json/${id}`);
         if (!response.ok) {
           setError('Product not found');
           return;
         }
         const data = await response.json();
-        setProduct(data);
+        // Ensure the data contains a valid list of products in 'nfts'
+        if (data && Array.isArray(data.nfts)) {
+          setProduct(data.nfts); // Update state with the fetched data
+        } else {
+          throw new Error('Invalid data structure');
+        }
         setError(null);
       } catch (error) {
         console.error('Error fetching product details:', error);
