@@ -3,7 +3,6 @@
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SearchIcon from '@mui/icons-material/Search';
-
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,6 +13,7 @@ interface NFT {
   name: string;
   image: string;
   description: string;
+  price: string; // Added the price property
 }
 
 export default function Product() {
@@ -41,7 +41,13 @@ export default function Product() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        setProducts(data); // Update state with the fetched data
+
+        // Ensure the data contains a valid list of products in 'nfts'
+        if (data && Array.isArray(data.nfts)) {
+          setProducts(data.nfts); // Update state with the fetched data
+        } else {
+          throw new Error('Invalid data structure');
+        }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
         console.error('Error fetching products:', errorMessage);
@@ -129,6 +135,7 @@ export default function Product() {
                 <div className={styles.info}>
                   <h3>{product.name}</h3>
                   <p>{product.description}</p>
+                  <p>Price: {product.price} GITN</p>
                 </div>
               </div>
             ))
