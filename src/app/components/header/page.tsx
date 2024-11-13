@@ -7,7 +7,7 @@ import styles from './header.module.css';
 
 const Header = () => {
   return (
-    <TonConnectUIProvider manifestUrl='https://ton-dapp-pi.vercel.app/tonconnect-manifest.json'>
+    <TonConnectUIProvider manifestUrl='https://ton-dapp-two.vercel.app/tonconnect-manifest.json'>
       <header className={styles.header}>
         <div className={styles.logo}>My DApp</div>
         <nav className={styles.nav}>

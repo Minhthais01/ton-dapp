@@ -14,34 +14,41 @@ interface Product {
 }
 
 export default function ProductDetail({ params }: { params: { id: string } }) {
-  const { id } = params;
-
+  const { id } = params; // Truy xuất trực tiếp id từ params
+  
   const [product, setProduct] = useState<Product | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
+
   useEffect(() => {
-    const fetchProductDetails = async () => {
+    if (!id) return;
+
+    const fetchProduct = async () => {
       try {
-        const response = await fetch('https://ton-dapp-two.vercel.app/db.json');
+        const response = await fetch(`https://ton-dapp-two.vercel.app/db.json`);
         if (!response.ok) {
           setError('Product not found');
           return;
         }
         const data = await response.json();
-        const product = data.nfts.find((item: Product) => item.id.toString() === id);
-        
-        if (!product) {
-          setError('Product not found');
+        const productData = data.nfts.find((p: Product) => p.id.toString() === id);
+
+        if (productData) {
+          setProduct(productData); // Update state with the fetched data
         } else {
-          setProduct(product);
+          setError('Product not found');
         }
+        setError(null);
       } catch (error) {
         console.error('Error fetching product details:', error);
         setError('Failed to load product details. Please try again later.');
       }
     };
 
-    fetchProductDetails();
+    fetchProduct();
   }, [id]);
 
   if (error) return <p>{error}</p>;
@@ -58,14 +65,40 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
           <div className={styles.productInfo}>
             <h2 className={styles.productTitle}>{product.name}</h2>
             <p className={styles.productDescription}>{product.description}</p>
-            <p className={styles.productPrice}>Auction Price: <span>{product.price} TON</span></p>
+            <p className={styles.productPrice}>Auction Price: <span>{product.price} GITN</span></p>
             <div className={styles.creatorInfo}>
               <p>Owner: <span>{product.owner}</span></p>
             </div>
-            <button className={styles.openPopupBtn}>Buy NFT</button>
+            <button className={styles.openPopupBtn} onClick={openPopup}>Buy NFT</button>
           </div>
         </div>
       </section>
+
+      {isPopupOpen && (
+        <div className={styles.popup}>
+          <div className={styles.popupContent}>
+            <div className={styles.popupHeader}>
+              <h2>Buy NFT</h2>
+              <span className={styles.closeBtn} onClick={closePopup}>&times;</span>
+            </div>
+
+            <div className={styles.nftPopupBody}>
+              <div className={styles.nftHeader}>
+                <Image className={styles.nftImage} src={product.image} alt={product.name} width={80} height={80} />
+                <div className={styles.nftTitleGroup}>
+                  <h2 className={styles.nftTitle}>{product.name}</h2>
+                  <h3 className={styles.nftSubtitle}>{product.owner}</h3>
+                </div>
+              </div>
+
+              <div className={styles.amount}>
+                <p className={styles.price}>Price: {product.price} GITN</p>
+                <button className={styles.buyBtn}>Proceed with Purchase</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
