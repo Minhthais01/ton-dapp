@@ -13,70 +13,50 @@ interface NFT {
   name: string;
   image: string;
   description: string;
-  price: string; // Added the price property
+  price: string;
 }
 
 export default function Product() {
-  // filter state
   const [isOpen, setIsOpen] = useState(false);
   const toggleFilter = () => setIsOpen(!isOpen);
 
-  // product data state
   const [products, setProducts] = useState<NFT[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetching the data
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true); // Ensure loading is true when fetching starts
+      setLoading(true);
       try {
         const response = await fetch('https://ton-dapp-two.vercel.app/db.json', {
           method: 'GET',
-          headers: {
-            'Cache-Control': 'no-cache', // Disable caching for fresh data
-          },
+          headers: { 'Cache-Control': 'no-cache' },
         });
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         const data = await response.json();
-
-        // Ensure the data contains a valid list of products in 'nfts'
         if (data && Array.isArray(data.nfts)) {
-          setProducts(data.nfts); // Update state with the fetched data
+          setProducts(data.nfts);
         } else {
           throw new Error('Invalid data structure');
         }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-        console.error('Error fetching products:', errorMessage);
         setError(errorMessage);
       } finally {
-        setLoading(false); // Stop loading after data is fetched
+        setLoading(false);
       }
     };
 
-    fetchProducts(); // Call the fetch function immediately on component mount
-  }, []); // Only call on mount
+    fetchProducts();
+  }, []);
 
-  // Showing loading or error if needed
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className={styles.container}>
       <label onClick={toggleFilter} className={styles.label}>
-        {isOpen ? (
-          <CancelIcon className={styles.closeBtn} fontSize="small" />
-        ) : (
-          <FilterAltIcon className={styles.filterBtn} fontSize="small" />
-        )}
+        {isOpen ? <CancelIcon className={styles.closeBtn} fontSize="small" /> : <FilterAltIcon className={styles.filterBtn} fontSize="small" />}
       </label>
 
       <div className={`${styles.sidenav} ${isOpen ? styles.show : ''}`}>
@@ -87,7 +67,6 @@ export default function Product() {
             <SearchIcon className={styles.searchIcon} fontSize="medium" />
           </form>
         </div>
-
         <div className={styles.iconItems}>
           <p className={styles.sort_by}>Sort by</p>
           <ul>
@@ -111,22 +90,13 @@ export default function Product() {
       </div>
 
       <div className={`${styles.mainContent} ${isOpen ? styles.shift : ''}`}>
-        {/* Display products */}
         <div className={styles.wrapper}>
           {Array.isArray(products) && products.length > 0 ? (
             products.map((product) => (
               <div key={product.id} className={styles.singleCard}>
                 <div className={styles.imgArea}>
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    width={320}
-                    height={300}
-                    className={styles.img}
-                    unoptimized // Optional, if you don't need image optimization
-                  />
+                  <Image src={product.image} alt={product.name} width={320} height={300} className={styles.img} unoptimized />
                   <div className={styles.overlay}>
-                    {/* Redirect to product detail */}
                     <Link href={`/product-detail/${product.id}`} className={styles.addToCart}>
                       View Detail
                     </Link>
