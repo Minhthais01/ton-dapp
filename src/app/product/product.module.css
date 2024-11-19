@@ -166,7 +166,7 @@
   }
 
   .show {
-      transform: translateY(30%); /* Slide up to show from the bottom */
+      transform: translateY(25%); /* Slide up to show from the bottom */
   }
 
   .shift {
