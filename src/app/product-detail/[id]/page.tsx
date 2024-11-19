@@ -94,17 +94,18 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
               <div className={styles.priceDetails}>
                 <div className={styles.nftPrice}>
                   <span className={styles.priceLabel}>NFT Price</span>
-                  <span className={styles.priceValueRight}><strong>{product.price}</strong> TON</span>
+                  <span className={styles.priceValueRight}><strong>{product.price}</strong> GITN</span>
                 </div>
-                <div className={styles.networkFee}>
+                {/* <div className={styles.networkFee}>
                   <span className={styles.priceLabel}>Network Fee</span>
-                  <span className={styles.priceValueRight}><strong>0.3</strong> TON</span>
-                </div>
+                  <span className={styles.priceValueRight}><strong>0.3</strong> GITN</span>
+                </div> */}
                 <span className={styles.priceInfo}>The rest will be returned to your wallet</span>
               </div>
 
               <div className={styles.nftActions}>
-                <button className={styles.buyBtn}>Buy for {parseFloat(product.price) + 0.3} TON</button>
+                {/* <button className={styles.buyBtn}>Buy for {parseFloat(product.price) + 0.3} GITN</button> */}
+                <button className={styles.buyBtn}>Buy for {product.price} GITN</button>
               </div>
             </div>
           </div>

@@ -8,6 +8,7 @@
 
 .closeBtn,
 .filterBtn {
+  margin-top: 90px;
   color: #000;
   position: fixed;
   z-index: 2;
@@ -16,6 +17,7 @@
 }
 
 .sidenav {
+  margin-top: 88px;
   width: 260px;
   height: 100%;
   position: fixed;
@@ -184,11 +186,12 @@
 
 
 .wrapper {
+  /* margin-top: 130px; */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
-  margin: 6% auto 0;
+  margin: 10% auto 0;
 }
 
 .singleCard {

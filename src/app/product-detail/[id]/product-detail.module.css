@@ -5,7 +5,7 @@
   }
   
   .productDetail {
-    margin: 20px 0;
+    margin: 80px 0;
   }
   
   .productCard {
@@ -13,7 +13,7 @@
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     overflow: hidden;
-    background: white;
+    background: rgb(241, 239, 239);
   }
   
   .productImage {

@@ -1,18 +1,14 @@
-/* Basic reset for box-sizing */
-/* * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-} */
-
 .header {
+  width: 100%;
+  position: fixed;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 4rem;
+  padding: 1rem 5rem;
   background-color: white;
   color: #333;
   border-bottom: 1px solid #eaeaea;
+  z-index: 1;
 }
 
 .logo {
@@ -28,7 +24,6 @@
 }
 
 .connectButton {
-  /* background-color: #007bff; */
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -36,14 +31,8 @@
   cursor: pointer;
 }
 
-/* .connectButton:hover {
-  background-color: #0056b3;
-} */
-
-/* Search bar styling */
 .searchBar {
   height: 45px;
-  /* width: 100%; */
   position: relative;
   display: flex;
   align-items: center;
@@ -68,16 +57,39 @@
   color: #888;
 }
 
-/* Mobile responsiveness */
+.menuIcon {
+  display: none;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .header {
-    flex-direction: column;
-    align-items: center;
+    padding: 1rem 2rem;
   }
 
+  .menuIcon {
+    display: block;
+  }
 
   .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
+    padding: 1rem 0;
+    display: none;
+  }
+
+  .navOpen {
+    display: flex;
+  }
+
+  .searchBar, .connectButton {
+    width: 90%;
+    max-width: 300px;
   }
 }
