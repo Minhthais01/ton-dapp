@@ -24,6 +24,14 @@ export default function Product() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // State for search, filter, and sort
+  const [searchTerm, setSearchTerm] = useState('');
+  const [minPrice, setMinPrice] = useState<number | ''>('');
+  const [maxPrice, setMaxPrice] = useState<number | ''>('');
+  const [sortOrder, setSortOrder] = useState('low-high');
+
+  const [filteredProducts, setFilteredProducts] = useState<NFT[]>([]);
+
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -50,6 +58,33 @@ export default function Product() {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    // Filter products based on search term and price range
+    const filtered = products.filter((product) => {
+      const matchesSearch =
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) 
+
+      const matchesPrice =
+        (minPrice ? product.price <= minPrice : true) &&
+        (maxPrice ? product.price >= maxPrice : true);
+
+      return matchesSearch && matchesPrice;
+    });
+
+    // Sort products based on selected sort order
+    const sortedProducts = filtered.sort((a, b) => {
+      const priceA = parseFloat(a.price);
+      const priceB = parseFloat(b.price);
+      if (sortOrder === 'low-high') {
+        return priceA - priceB;
+      } else {
+        return priceB - priceA;
+      }
+    });
+
+    setFilteredProducts(sortedProducts);
+  }, [searchTerm, minPrice, maxPrice, sortOrder, products]);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
@@ -63,7 +98,13 @@ export default function Product() {
         <p className={styles.heading}>Filter</p>
         <div className={styles.searchBar}>
           <form className={styles.searchBar_form} action="#">
-            <input className={styles.searchInput} type="text" placeholder="Search..." />
+            <input
+              className={styles.searchInput}
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <SearchIcon className={styles.searchIcon} fontSize="medium" />
           </form>
         </div>
@@ -71,7 +112,12 @@ export default function Product() {
           <p className={styles.sort_by}>Sort by</p>
           <ul>
             <li>
-              <select id="sort" className={styles.sortDropdown}>
+              <select
+                id="sort"
+                className={styles.sortDropdown}
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+              >
                 <option value="low-high">Price: Low to High</option>
                 <option value="high-low">Price: High to Low</option>
               </select>
@@ -82,8 +128,20 @@ export default function Product() {
         <div className={styles.priceRange}>
           <p className={styles.price_Range}>Price Range</p>
           <div className={styles.priceInputs}>
-            <input type="number" placeholder="From" className={styles.priceFrom} />
-            <input type="number" placeholder="To" className={styles.priceTo} />
+            <input
+              type="number"
+              placeholder="From"
+              className={styles.priceFrom}
+              value={minPrice === '' ? '' : minPrice}
+              onChange={(e) => setMinPrice(e.target.value ? Number(e.target.value) : '')}
+            />
+            <input
+              type="number"
+              placeholder="To"
+              className={styles.priceTo}
+              value={maxPrice === '' ? '' : maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value ? Number(e.target.value) : '')}
+            />
           </div>
           <button className={styles.applyBtn}>Apply</button>
         </div>
@@ -91,8 +149,8 @@ export default function Product() {
 
       <div className={`${styles.mainContent} ${isOpen ? styles.shift : ''}`}>
         <div className={styles.wrapper}>
-          {Array.isArray(products) && products.length > 0 ? (
-            products.map((product) => (
+          {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
               <div key={product.id} className={styles.singleCard}>
                 <div className={styles.imgArea}>
                   <Image src={product.image} alt={product.name} width={320} height={300} className={styles.img} unoptimized />
