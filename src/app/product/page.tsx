@@ -97,7 +97,7 @@ export default function Product() {
                 <div className={styles.imgArea}>
                   <Image src={product.image} alt={product.name} width={320} height={300} className={styles.img} unoptimized />
                   <div className={styles.overlay}>
-                    <Link href={`/product-detail/${product.id}`} className={styles.addToCart}>
+                    <Link href={`/product-detail/${product.id}`} className={styles.viewDteail}>
                       View Detail
                     </Link>
                   </div>

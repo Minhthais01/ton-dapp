@@ -1,6 +1,7 @@
 .header {
   width: 100%;
   position: fixed;
+  top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -21,6 +22,12 @@
   display: flex;
   align-items: center;
   gap: 2rem;
+}
+
+.navLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Adjust the gap between search and cart */
 }
 
 .connectButton {
@@ -62,6 +69,10 @@
   cursor: pointer;
 }
 
+.cartIcon {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   .header {
     padding: 1rem 2rem;
@@ -91,5 +102,9 @@
   .searchBar, .connectButton {
     width: 90%;
     max-width: 300px;
+  }
+
+  .navLeft {
+    gap: 1rem; /* Adjust gap in mobile view */
   }
 }

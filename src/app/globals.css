@@ -20,6 +20,11 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+.layout-container {
+  margin-top: 80px; /* Khoảng cách giữa Header và children */
+}
+
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

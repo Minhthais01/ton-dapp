@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './product-detail.module.css';
+import Alert from '@mui/material/Alert';
+import { Snackbar } from '@mui/material'; // Import Snackbar để hiển thị thông báo
 
 interface Product {
   id: string;
@@ -14,14 +16,13 @@ interface Product {
 }
 
 export default function ProductDetail({ params }: { params: { id: string } }) {
-  const { id } = params; // Truy xuất trực tiếp id từ params
-  
-  const [product, setProduct] = useState<Product | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { id } = params;
 
-  const openPopup = () => setIsPopupOpen(true);
-  const closePopup = () => setIsPopupOpen(false);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [openAlert, setOpenAlert] = useState(false); // state để quản lý việc mở/đóng alert
+  const [alertMessage, setAlertMessage] = useState(''); // state để chứa thông báo
+  const [alertSeverity, setAlertSeverity] = useState<'success' | 'warning'>('success'); // Thêm trạng thái severity
 
   useEffect(() => {
     if (!id) return;
@@ -37,7 +38,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
         const productData = data.nfts.find((p: Product) => p.id.toString() === id);
 
         if (productData) {
-          setProduct(productData); // Update state with the fetched data
+          setProduct(productData); 
         } else {
           setError('Product not found');
         }
@@ -51,12 +52,47 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     fetchProduct();
   }, [id]);
 
-  if (error) return <p>{error}</p>;
+  const handleAddToCart = () => {
+    if (!product) return;
+  
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingProduct = cart.find((item: Product) => item.id === product.id);
+  
+    if (existingProduct) {
+      setAlertMessage('This product is already in your cart');  // Thông báo cảnh báo khi sản phẩm đã có trong giỏ hàng
+      setAlertSeverity('warning'); // Sử dụng severity "warning"
+      setOpenAlert(true);
+      return;
+    }
+  
+    cart.push(product);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    setAlertMessage('Product added to cart successfully'); // Thông báo khi sản phẩm được thêm vào giỏ hàng
+    setAlertSeverity('success'); // Sử dụng severity "success"
+    setOpenAlert(true);
+  };
 
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
+
+  if (error) return <p>{error}</p>;
   if (!product) return <p>Loading product details...</p>;
 
   return (
     <div className={styles.container}>
+      {/* Snackbar hiển thị thông báo */}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={3000} // Thời gian hiển thị là 3 giây
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Hiển thị ở trên cùng, giữa màn hình
+      >
+        <Alert onClose={handleCloseAlert} severity={alertSeverity} sx={{ width: '100%' }}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+
       <section className={styles.productDetail}>
         <div className={styles.productCard}>
           <div className={styles.productImage}>
@@ -65,52 +101,16 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
           <div className={styles.productInfo}>
             <h2 className={styles.productTitle}>{product.name}</h2>
             <p className={styles.productDescription}>{product.description}</p>
-            <p className={styles.productPrice}>Auction Price: <span>{product.price} GITN</span></p>
+            <p className={styles.productPrice}>Price: <span>{product.price} GITN</span></p>
             <div className={styles.creatorInfo}>
               <p>Owner: <span>{product.owner}</span></p>
             </div>
-            <button className={styles.openPopupBtn} onClick={openPopup}>Buy NFT</button>
+            <button onClick={handleAddToCart} className={styles.addToCartBtn}>
+              Add to Cart
+            </button>
           </div>
         </div>
       </section>
-
-      {isPopupOpen && (
-        <div className={styles.popup}>
-          <div className={styles.popupContent}>
-            <div className={styles.popupHeader}>
-              <h2>Buy NFT</h2>
-              <span className={styles.closeBtn} onClick={closePopup}>&times;</span>
-            </div>
-
-            <div className={styles.nftPopupBody}>
-              <div className={styles.nftHeader}>
-                <Image className={styles.nftImage} src={product.image} alt={product.name} width={80} height={80} />
-                <div className={styles.nftTitleGroup}>
-                  <h2 className={styles.nftTitle}>{product.name}</h2>
-                  <h3 className={styles.nftSubtitle}>{product.owner}</h3>
-                </div>
-              </div>
-
-              <div className={styles.priceDetails}>
-                <div className={styles.nftPrice}>
-                  <span className={styles.priceLabel}>NFT Price</span>
-                  <span className={styles.priceValueRight}><strong>{product.price}</strong> GITN</span>
-                </div>
-                {/* <div className={styles.networkFee}>
-                  <span className={styles.priceLabel}>Network Fee</span>
-                  <span className={styles.priceValueRight}><strong>0.3</strong> GITN</span>
-                </div> */}
-                <span className={styles.priceInfo}>The rest will be returned to your wallet</span>
-              </div>
-
-              <div className={styles.nftActions}>
-                {/* <button className={styles.buyBtn}>Buy for {parseFloat(product.price) + 0.3} GITN</button> */}
-                <button className={styles.buyBtn}>Buy for {product.price} GITN</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
