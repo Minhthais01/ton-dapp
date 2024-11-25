@@ -14,11 +14,11 @@ interface Product {
 }
 
 export default function ProductDetail({ params }: { params: { id: string } }) {
-  const { id } = params; // Truy xuất trực tiếp id từ params
-  
-  const [product, setProduct] = useState<Product | null>(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { id } = params; // Lấy id từ params
+
+  const [product, setProduct] = useState<Product | null>(null); // Dữ liệu sản phẩm
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // Trạng thái mở popup
+  const [error, setError] = useState<string | null>(null); 
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
@@ -26,22 +26,28 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (!id) return;
 
+    // Hàm lấy dữ liệu sản phẩm từ API
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://ton-dapp-two.vercel.app/db.json`);
+        const response = await fetch(`https://marketplace-on-ton-6xpf.onrender.com/products`);
         if (!response.ok) {
           setError('Product not found');
           return;
         }
         const data = await response.json();
-        const productData = data.nfts.find((p: Product) => p.id.toString() === id);
+
+        // Tìm sản phẩm có id khớp với params id
+        const productData = data.data.find((p: Product) => p.id === id);
 
         if (productData) {
-          setProduct(productData); // Update state with the fetched data
+          // Cập nhật state với dữ liệu sản phẩm
+          setProduct({
+            ...productData,
+            price: Number(productData.price), // Chuyển giá thành number
+          });
         } else {
           setError('Product not found');
         }
-        setError(null);
       } catch (error) {
         console.error('Error fetching product details:', error);
         setError('Failed to load product details. Please try again later.');
@@ -60,12 +66,13 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
       <section className={styles.productDetail}>
         <div className={styles.productCard}>
           <div className={styles.productImage}>
-            <Image src={product.image} alt={product.name} width={400} height={400} />
+            {/* Sử dụng Image từ Next.js */}
+         
           </div>
           <div className={styles.productInfo}>
             <h2 className={styles.productTitle}>{product.name}</h2>
             <p className={styles.productDescription}>{product.description}</p>
-            <p className={styles.productPrice}>Auction Price: <span>{product.price} GITN</span></p>
+            <p className={styles.productPrice}>Price: <span>{product.price} GITN</span></p>
             <div className={styles.creatorInfo}>
               <p>Owner: <span>{product.owner}</span></p>
             </div>
@@ -84,7 +91,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
 
             <div className={styles.nftPopupBody}>
               <div className={styles.nftHeader}>
-                <Image className={styles.nftImage} src={product.image} alt={product.name} width={80} height={80} />
+                <Image className={styles.nftImage} src={`https://ton-dapp-two.vercel.app/storage/${product.image}`} alt={product.name} width={80} height={80} />
                 <div className={styles.nftTitleGroup}>
                   <h2 className={styles.nftTitle}>{product.name}</h2>
                   <h3 className={styles.nftSubtitle}>{product.owner}</h3>
@@ -96,15 +103,10 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
                   <span className={styles.priceLabel}>NFT Price</span>
                   <span className={styles.priceValueRight}><strong>{product.price}</strong> GITN</span>
                 </div>
-                {/* <div className={styles.networkFee}>
-                  <span className={styles.priceLabel}>Network Fee</span>
-                  <span className={styles.priceValueRight}><strong>0.3</strong> GITN</span>
-                </div> */}
                 <span className={styles.priceInfo}>The rest will be returned to your wallet</span>
               </div>
 
               <div className={styles.nftActions}>
-                {/* <button className={styles.buyBtn}>Buy for {parseFloat(product.price) + 0.3} GITN</button> */}
                 <button className={styles.buyBtn}>Buy for {product.price} GITN</button>
               </div>
             </div>

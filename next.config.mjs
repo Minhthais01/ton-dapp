@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     images: {
-    domains: ['i.getgems.io'], // Thêm hostname ở đây
+    domains: ['ton-dapp-two.vercel.app'], // Thêm hostname ở đây
   },
 };
 

@@ -1,92 +1,95 @@
-'use client';
-
+"use client";
+import { useState, useEffect } from 'react';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import CancelIcon from '@mui/icons-material/Cancel';
 import SearchIcon from '@mui/icons-material/Search';
-import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './product.module.css';
 
-interface NFT {
-  id: number;
+type Product = {
+  id: string;
   name: string;
   image: string;
-  description: string;
-  price: string;
-}
+  description: string | null;
+  price: number;
+  directus_files: {
+    filename_disk: string;
+  };
+};
+
+type ProductResponse = {
+  data: Product[];
+};
 
 export default function Product() {
   const [isOpen, setIsOpen] = useState(false);
-  const toggleFilter = () => setIsOpen(!isOpen);
-
-  const [products, setProducts] = useState<NFT[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // State for search, filter, and sort
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [minPrice, setMinPrice] = useState<number | ''>('');
   const [maxPrice, setMaxPrice] = useState<number | ''>('');
   const [sortOrder, setSortOrder] = useState('low-high');
 
-  const [filteredProducts, setFilteredProducts] = useState<NFT[]>([]);
-
+  // Fetch products from the API
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true);
       try {
-        const response = await fetch('https://ton-dapp-two.vercel.app/db.json', {
-          method: 'GET',
-          headers: { 'Cache-Control': 'no-cache' },
-        });
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        const data = await response.json();
-        if (data && Array.isArray(data.nfts)) {
-          setProducts(data.nfts);
-        } else {
-          throw new Error('Invalid data structure');
-        }
+        const response = await fetch(`https://marketplace-on-ton-6xpf.onrender.com/products?sort=desc`);
+        const result: ProductResponse = await response.json();
+
+        // Map API data to our Product type
+        const products = result.data.map((product) => ({
+          id: product.id,
+          name: product.name,
+          price: Number(product.price), // Ensure price is a number
+          image: product.directus_files.filename_disk, // Assuming you want to get the image URL from here
+          description: product.description,
+        }));
+
+        setFilteredProducts(products);
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-        setError(errorMessage);
-      } finally {
-        setLoading(false);
+        console.error('Error fetching products:', error);
       }
     };
 
     fetchProducts();
   }, []);
 
-  useEffect(() => {
-    // Filter products based on search term and price range
-    const filtered = products.filter((product) => {
-      const matchesSearch =
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) 
+  // Function to sort products by price
+  const sortProducts = (products: Product[]) => {
+    if (sortOrder === 'low-high') {
+      return products.sort((a, b) => a.price - b.price); // Sort ascending
+    } else {
+      return products.sort((a, b) => b.price - a.price); // Sort descending
+    }
+  };
 
-      const matchesPrice =
-        (minPrice ? product.price <= minPrice : true) &&
-        (maxPrice ? product.price >= maxPrice : true);
+  // Function to filter products based on search and price range
+  const getFilteredProducts = () => {
+    let filtered = filteredProducts;
 
-      return matchesSearch && matchesPrice;
-    });
+    // Filter by search term
+    if (searchTerm) {
+      filtered = filtered.filter((product) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
 
-    // Sort products based on selected sort order
-    const sortedProducts = filtered.sort((a, b) => {
-      const priceA = parseFloat(a.price);
-      const priceB = parseFloat(b.price);
-      if (sortOrder === 'low-high') {
-        return priceA - priceB;
-      } else {
-        return priceB - priceA;
-      }
-    });
+    // Filter by price range
+    if (minPrice !== '' || maxPrice !== '') {
+      filtered = filtered.filter((product) => {
+        const productPrice = product.price;  // Ensure price is a number
+        const matchesMinPrice = minPrice ? productPrice >= minPrice : true;
+        const matchesMaxPrice = maxPrice ? productPrice <= maxPrice : true;
+        return matchesMinPrice && matchesMaxPrice;
+      });
+    }
 
-    setFilteredProducts(sortedProducts);
-  }, [searchTerm, minPrice, maxPrice, sortOrder, products]);
+    // Sort the filtered products
+    return sortProducts(filtered);
+  };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  const toggleFilter = () => setIsOpen(!isOpen);
 
   return (
     <div className={styles.container}>
@@ -149,11 +152,21 @@ export default function Product() {
 
       <div className={`${styles.mainContent} ${isOpen ? styles.shift : ''}`}>
         <div className={styles.wrapper}>
-          {Array.isArray(filteredProducts) && filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
+          {/* Hiển thị thông báo không có sản phẩm */}
+          {getFilteredProducts().length === 0 ? (
+            <p>No products available</p>
+          ) : (
+            getFilteredProducts().map((product) => (
               <div key={product.id} className={styles.singleCard}>
                 <div className={styles.imgArea}>
-                  <Image src={product.image} alt={product.name} width={320} height={300} className={styles.img} unoptimized />
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={320}
+                    height={300}
+                    className={styles.img}
+                    unoptimized
+                  />
                   <div className={styles.overlay}>
                     <Link href={`/product-detail/${product.id}`} className={styles.addToCart}>
                       View Detail
@@ -167,8 +180,6 @@ export default function Product() {
                 </div>
               </div>
             ))
-          ) : (
-            <p>No products available</p>
           )}
         </div>
       </div>
