@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './product.module.css';
 
-type data = {
+type Product = {
   id: string;
   name: string;
   imageUrl: string;
@@ -17,7 +17,7 @@ type data = {
 
 export default function Product() {
   const [isOpen, setIsOpen] = useState(false);
-  const [products, setProducts] = useState<data[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [minPrice, setMinPrice] = useState<number | ''>('');
   const [maxPrice, setMaxPrice] = useState<number | ''>('');
