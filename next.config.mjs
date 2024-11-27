@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-    domains: ['ton-dapp-two.vercel.app'], // Thêm hostname ở đây
+  images: {
+    domains: ['gfjqzunwuzwdpeqqjqva.supabase.co'], // Thêm hostname của Supabase
   },
 };
 

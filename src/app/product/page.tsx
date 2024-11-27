@@ -7,24 +7,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 import styles from './product.module.css';
 
-type Product = {
+type data = {
   id: string;
   name: string;
-  image: string;
+  imageUrl: string;
   description: string | null;
   price: number;
-  directus_files: {
-    filename_disk: string;
-  };
-};
-
-type ProductResponse = {
-  data: Product[];
 };
 
 export default function Product() {
   const [isOpen, setIsOpen] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<data[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [minPrice, setMinPrice] = useState<number | ''>('');
   const [maxPrice, setMaxPrice] = useState<number | ''>('');
@@ -35,38 +28,31 @@ export default function Product() {
     const fetchProducts = async () => {
       try {
         const response = await fetch(`https://marketplace-on-ton-6xpf.onrender.com/products?sort=desc`);
-        const result: ProductResponse = await response.json();
-
-        // Map API data to our Product type
-        const products = result.data.map((product) => ({
+        const result = await response.json();
+  
+        console.log('API Response:', result); // Kiểm tra dữ liệu từ API
+  
+        const products = result.data.map((product: any) => ({
           id: product.id,
           name: product.name,
-          price: Number(product.price), // Ensure price is a number
-          image: product.directus_files.filename_disk, // Assuming you want to get the image URL from here
-          description: product.description,
+          price: Number(product.price),
+          image: product.imageUrl,
+          description: product.description || 'No description available',
         }));
-
-        setFilteredProducts(products);
+  
+        setProducts(products);
       } catch (error) {
         console.error('Error fetching products:', error);
       }
     };
-
+  
     fetchProducts();
   }, []);
-
-  // Function to sort products by price
-  const sortProducts = (products: Product[]) => {
-    if (sortOrder === 'low-high') {
-      return products.sort((a, b) => a.price - b.price); // Sort ascending
-    } else {
-      return products.sort((a, b) => b.price - a.price); // Sort descending
-    }
-  };
+  
 
   // Function to filter products based on search and price range
   const getFilteredProducts = () => {
-    let filtered = filteredProducts;
+    let filtered = [...products];
 
     // Filter by search term
     if (searchTerm) {
@@ -78,23 +64,32 @@ export default function Product() {
     // Filter by price range
     if (minPrice !== '' || maxPrice !== '') {
       filtered = filtered.filter((product) => {
-        const productPrice = product.price;  // Ensure price is a number
+        const productPrice = product.price;
         const matchesMinPrice = minPrice ? productPrice >= minPrice : true;
         const matchesMaxPrice = maxPrice ? productPrice <= maxPrice : true;
         return matchesMinPrice && matchesMaxPrice;
       });
     }
 
-    // Sort the filtered products
-    return sortProducts(filtered);
+    // Sort by price
+    filtered.sort((a, b) => {
+      return sortOrder === 'low-high' ? a.price - b.price : b.price - a.price;
+    });
+
+    return filtered;
   };
 
   const toggleFilter = () => setIsOpen(!isOpen);
 
   return (
     <div className={styles.container}>
+      {/* Filter Section */}
       <label onClick={toggleFilter} className={styles.label}>
-        {isOpen ? <CancelIcon className={styles.closeBtn} fontSize="small" /> : <FilterAltIcon className={styles.filterBtn} fontSize="small" />}
+        {isOpen ? (
+          <CancelIcon className={styles.closeBtn} fontSize="small" />
+        ) : (
+          <FilterAltIcon className={styles.filterBtn} fontSize="small" />
+        )}
       </label>
 
       <div className={`${styles.sidenav} ${isOpen ? styles.show : ''}`}>
@@ -146,26 +141,25 @@ export default function Product() {
               onChange={(e) => setMaxPrice(e.target.value ? Number(e.target.value) : '')}
             />
           </div>
-          <button className={styles.applyBtn}>Apply</button>
         </div>
       </div>
 
+      {/* Product List */}
       <div className={`${styles.mainContent} ${isOpen ? styles.shift : ''}`}>
         <div className={styles.wrapper}>
-          {/* Hiển thị thông báo không có sản phẩm */}
           {getFilteredProducts().length === 0 ? (
-            <p>No products available</p>
+            <p>No products found.</p>
           ) : (
             getFilteredProducts().map((product) => (
               <div key={product.id} className={styles.singleCard}>
                 <div className={styles.imgArea}>
                   <Image
-                    src={product.image}
+                    src={product.imageUrl} 
                     alt={product.name}
                     width={320}
                     height={300}
                     className={styles.img}
-                    unoptimized
+                    unoptimized // Sử dụng unoptimized nếu hình ảnh từ ngoài
                   />
                   <div className={styles.overlay}>
                     <Link href={`/product-detail/${product.id}`} className={styles.addToCart}>

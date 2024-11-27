@@ -29,7 +29,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     // Hàm lấy dữ liệu sản phẩm từ API
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://marketplace-on-ton-6xpf.onrender.com/products`);
+        const response = await fetch(`https://marketplace-on-ton-6xpf.onrender.com/products?sort=desc`);
         if (!response.ok) {
           setError('Product not found');
           return;
@@ -91,7 +91,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
 
             <div className={styles.nftPopupBody}>
               <div className={styles.nftHeader}>
-                <Image className={styles.nftImage} src={`https://ton-dapp-two.vercel.app/storage/${product.image}`} alt={product.name} width={80} height={80} />
+                <Image className={styles.nftImage} src={`https://gfjqzunwuzwdpeqqjqva.supabase.co/storage/v1/object/public/marketplace-on-ton/${product.image}`} alt={product.name} width={80} height={80} />
                 <div className={styles.nftTitleGroup}>
                   <h2 className={styles.nftTitle}>{product.name}</h2>
                   <h3 className={styles.nftSubtitle}>{product.owner}</h3>
