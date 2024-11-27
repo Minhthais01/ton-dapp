@@ -66,7 +66,7 @@ const Header = () => {
               </Badge>
             </IconButton>
           </Link>
-          <Link href="/sigin">
+          <Link href="/signin">
           <p>Login</p>
           </Link>
         </nav>
