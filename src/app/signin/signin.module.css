@@ -187,6 +187,14 @@ body {
 .container.active .toggle {
   transform: translateX(50%);
 }
+.container.active .signIn {
+  transform: translateX(100%);
+}
+.container.active .signUp {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+}
 
 .togglePanel {
   position: absolute;

@@ -10,7 +10,7 @@ interface Product {
   id: string;
   name: string;
   price: string;
-  image: string;
+  imageUrl: string;
 }
 
 export default function Cart() {
@@ -63,7 +63,7 @@ export default function Cart() {
           ) : (
             cart.map((product) => (
               <div key={product.id} className={styles.box}>
-                <Image src={product.image} alt={product.name} width={200} height={200} className="img" />
+                <Image src={product.imageUrl} alt={product.name} width={200} height={200} className="img" />
                 <div className={styles.content}>
                   <h3>{product.name}</h3>
                   <h4>Price: {product.price} GITN</h4>

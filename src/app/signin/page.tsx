@@ -1,91 +1,79 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Import useRouter
 import styles from './signin.module.css';
-import { Google, Facebook, GitHub, LinkedIn } from '@mui/icons-material'; // Import các icon từ MUI
+import { Google, Facebook, GitHub, LinkedIn } from '@mui/icons-material';
 
 const SignIn = () => {
   const [isActive, setIsActive] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
 
-  const handleRegisterClick = () => {
-    setIsActive(true);
+  const router = useRouter(); // Khởi tạo router
+
+  const handleRegisterClick = () => setIsActive(true);
+  const handleLoginClick = () => setIsActive(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleLoginClick = () => {
-    setIsActive(false);
-  };
-
-  const handleSignUp = async (event: React.FormEvent) => {
-    event.preventDefault(); 
-
-    if (password !== confirmPassword) {
-      setError('Mật khẩu không khớp');
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match!');
       return;
     }
-
-    setIsLoading(true);
-    setError('');
-
     try {
-      const response = await fetch('https://marketplace-on-ton-6xpf.onrender.com/signup', {
+      const response = await fetch('https://marketplace-on-ton-6xpf.onrender.com/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Đăng ký không thành công');
-      }
-
       const data = await response.json();
-      console.log('Đăng ký thành công:', data);
-      // Có thể thực hiện thêm các bước sau khi đăng ký thành công
-
-    } catch (err: any) {
-      console.error('Lỗi khi gửi yêu cầu đăng ký:', err);
-      setError(err.message || 'Đã có lỗi xảy ra');
-    } finally {
-      setIsLoading(false);
+      if (response.ok) {
+        alert('Registration successful!');
+        router.push('/'); // Chuyển hướng về trang chủ
+      } else {
+        alert(data.message || 'Registration failed!');
+      }
+    } catch (error) {
+      console.error('Sign Up Error:', error);
     }
   };
 
-  const handleSignIn = async (event: React.FormEvent) => {
-    event.preventDefault(); // Ngăn chặn reload trang khi form được submit
-
-    setIsLoading(true);
-    setError('');
-
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
     try {
-      const response = await fetch('https://marketplace-on-ton-6xpf.onrender.com/signin', {
+      const response = await fetch('https://marketplace-on-ton-6xpf.onrender.com/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Đăng nhập không thành công');
-      }
-
       const data = await response.json();
-      console.log('Đăng nhập thành công:', data);
-      // Thực hiện các hành động sau khi đăng nhập thành công
-
-    } catch (err: any) {
-      console.error('Lỗi khi gửi yêu cầu đăng nhập:', err);
-      setError(err.message || 'Đã có lỗi xảy ra');
-    } finally {
-      setIsLoading(false);
+      if (response.ok) {
+        // Lưu token vào localStorage
+        localStorage.setItem('authToken', data.token); // Giả sử server trả về token
+        alert('Login successful!');
+        router.push('/'); // Chuyển hướng về trang chủ
+      } else {
+        alert(data.message || 'Login failed!');
+      }
+    } catch (error) {
+      console.error('Sign In Error:', error);
     }
   };
 
@@ -104,28 +92,38 @@ const SignIn = () => {
             </div>
             <span>or use your email for registration</span>
             <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+            />
+            <input
               type="email"
+              name="email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleInputChange}
               required
             />
             <input
               type="password"
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleInputChange}
               required
             />
             <input
               type="password"
+              name="confirmPassword"
               placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
               required
             />
-            {error && <p className={styles.error}>{error}</p>}
-            <button type="submit" disabled={isLoading}>Sign Up</button>
+            <button type="submit">Sign Up</button>
           </form>
         </div>
 
@@ -142,21 +140,22 @@ const SignIn = () => {
             <span>or use your email password</span>
             <input
               type="email"
+              name="email"
               placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleInputChange}
               required
             />
             <input
               type="password"
+              name="password"
               placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleInputChange}
               required
             />
-            {error && <p className={styles.error}>{error}</p>}
             <a href="#">Forgot Your Password?</a>
-            <button type="submit" disabled={isLoading}>Sign In</button>
+            <button type="submit">Sign In</button>
           </form>
         </div>
 

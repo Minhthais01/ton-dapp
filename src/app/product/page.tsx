@@ -30,13 +30,13 @@ export default function Product() {
         const response = await fetch(`https://marketplace-on-ton-6xpf.onrender.com/products?sort=desc`);
         const result = await response.json();
   
-        console.log('API Response:', result); // Kiểm tra dữ liệu từ API
+        console.log('API Response:', result);  // Kiểm tra kết quả API
   
         const products = result.data.map((product: any) => ({
           id: product.id,
           name: product.name,
           price: Number(product.price),
-          image: product.imageUrl,
+          imageUrl: product.imageUrl,  
           description: product.description || 'No description available',
         }));
   
@@ -154,13 +154,14 @@ export default function Product() {
               <div key={product.id} className={styles.singleCard}>
                 <div className={styles.imgArea}>
                   <Image
-                    src={product.imageUrl} 
+                    src={product.imageUrl}  // Đảm bảo rằng `imageUrl` là URL hợp lệ từ API
                     alt={product.name}
                     width={320}
                     height={300}
                     className={styles.img}
-                    unoptimized // Sử dụng unoptimized nếu hình ảnh từ ngoài
+                    unoptimized  // Để bỏ qua tối ưu hóa hình ảnh từ nguồn ngoài
                   />
+
                   <div className={styles.overlay}>
                     <Link href={`/product-detail/${product.id}`} className={styles.addToCart}>
                       View Detail

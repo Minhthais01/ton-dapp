@@ -1,203 +1,248 @@
-/* Footer.module.css */
-.footer {
-  background-color: #1c1c1c;
-  color: #f7f7f7;
-  padding: 50px 20px;
-  width: 100%;
-  box-sizing: border-box;
-  border-top: 4px solid #f39c12;
+/* footer.module.css */
+.mainContent {
+  background-color: #f9f9f9;
+  padding: 40px 20px;
 }
 
-.footerContent {
+.footer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 30px;
+  color: #333;
+  width: 100%;
+}
+
+.footerContent {
+  max-width: 1200px;
+  width: 100%;
+
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+.logoSection {
   text-align: center;
 }
 
 .aboutTitle {
-  font-size: 32px;
+  font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 30px;
-  text-transform: uppercase;
-  color: #f39c12;
+  margin-bottom: 20px;
+  color: #222;
 }
 
 .contentNavigation {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 30px;
+  justify-content: center;
+  gap: 15px;
+  width: 100%;
+}
+
+.navigationButton {
+  background-color: #0078d7;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.navigationButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.navigationButton:hover:not(:disabled) {
+  transform: scale(1.1);
 }
 
 .contentBoxes {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  flex: 1;
 }
 
 .contentBox {
-  background-color: #2c3e50;
+  background-color: white;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 20px;
-  width: 280px;
-  box-sizing: border-box;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contentBox:hover {
   transform: translateY(-5px);
-  background-color: #16a085;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .contentBox h4 {
-  font-size: 22px;
+  font-size: 1.2rem;
   margin-bottom: 10px;
-  font-weight: bold;
-  color: #ecf0f1;
+  color: #333;
 }
 
 .contentBox p {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #bdc3c7;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
 }
 
 .footerContainer {
-  display: flex;
-  justify-content: space-between;
-  padding: 30px;
-  margin-top: 40px;
   width: 100%;
-  flex-wrap: wrap;
-}
-
-.footerColumns {
+  border-top: 1px solid #eee;
+  padding: 20px 0;
   display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}
+
+.footerContent2 {
+
   width: 100%;
-  justify-content: space-between;
-}
-
-.column {
-  flex: 1;
-  margin-right: 20px;
-  min-width: 200px;
-  text-align: left;
-}
-
-.column h4 {
-  font-size: 18px;
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #f39c12;
-}
-
-.column ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-.column li {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #bdc3c7;
-}
-
-.column a {
-  text-decoration: none;
-  color: #bdc3c7;
-  transition: color 0.3s;
-}
-
-.column a:hover {
-  color: #f39c12;
+  text-align: center;
 }
 
 .buttonContainer {
   display: flex;
-  justify-content: flex-start;
-  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
 }
 
 .button {
-  padding: 12px 20px;
-  border: 2px solid #f39c12;
-  background-color: transparent;
-  color: #f39c12;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #0078d7;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 25px;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .button:hover {
-  background-color: #f39c12;
-  color: #1c1c1c;
+  background-color: #005bb5;
+  transform: scale(1.05);
 }
 
-.navigationButton {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 10px;
-  display: flex;
-  align-items: center;
+.statsSection, .communityLinks {
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.navigationButton:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+.statsSection h4, .communityLinks h4 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #222;
 }
 
-/* Responsive adjustments */
+.statsSection ul, .communityLinks ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.statsSection li, .communityLinks li {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.footerColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  width: 100%;
+}
+
+.column {
+  text-align: left;
+}
+
+.column h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.column li {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.column a {
+  color: #0078d7;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.column a:hover {
+  color: #005bb5;
+}
+
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-  .footer {
-    padding: 20px;
-  }
-
-  .aboutTitle {
-    font-size: 28px;
-  }
-
-  .contentBoxes {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .contentBox {
-    max-width: 90%;
-    margin-bottom: 15px;
-    text-align: center;
-  }
-
-  .footerContainer {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .footerColumns {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .column {
-    margin: 10px 0;
-    width: 100%;
-    text-align: center;
-  }
-
-  .buttonContainer {
-    justify-content: center;
-  }
-
-  .button {
-    padding: 10px 15px;
+  .footerContent {
+      gap: 20px;
   }
 
   .contentNavigation {
-    flex-direction: column;
-    gap: 20px;
+      flex-direction: column;
+  }
+
+  .contentBoxes {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .footerColumns {
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .button {
+      padding: 8px 10px;
+      font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .aboutTitle {
+      font-size: 1.5rem;
+  }
+
+  .contentBox {
+      padding: 10px;
+  }
+
+  .button {
+      gap: 5px;
+      padding: 8px 8px;
+      font-size: 0.8rem;
+  }
+
+  .statsSection ul, .communityLinks ul {
+      font-size: 0.8rem;
+  }
+
+  .column ul li {
+      font-size: 0.8rem;
   }
 }

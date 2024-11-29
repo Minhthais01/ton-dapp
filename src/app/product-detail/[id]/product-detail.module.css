@@ -1,186 +1,290 @@
+/* Cấu trúc chung */
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .productDetail {
-    margin: 80px 0;
-  }
-  
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Chi tiết sản phẩm */
+.productDetail {
+  margin: 80px 0;
+}
+
+/* Card sản phẩm */
+.productCard {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgb(241, 239, 239);
+  color: black;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Hình ảnh sản phẩm */
+.productImage {
+  flex: 1;
+  max-width: 100%;
+}
+
+/* Thông tin sản phẩm */
+.productInfo {
+  flex: 2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Tiêu đề sản phẩm */
+.productTitle {
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Mô tả sản phẩm */
+.productDescription {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Giá sản phẩm */
+.productPrice {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+/* Thông tin người tạo */
+.creatorInfo {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Nút mở popup */
+.openPopupBtn {
+  margin-top: 10px;
+  padding: 12px 20px;
+  background-color: #0056d9;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.openPopupBtn:hover {
+  background-color: orangered;
+}
+
+/* Popup */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Nội dung popup */
+.popupContent {
+  background-color: white;
+  color: black;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 450px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+/* Header popup */
+.popupHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.popupHeader h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+/* Nút đóng popup */
+.closeBtn {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* Nội dung popup */
+.nftPopupBody {
+  text-align: left;
+}
+
+/* Header NFT */
+.nftHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Hình ảnh NFT */
+.nftImage {
+  border-radius: 5px;
+}
+
+/* Nhóm tiêu đề NFT */
+.nftTitleGroup {
+  margin-left: 10px;
+}
+
+/* Tiêu đề NFT */
+.nftTitle {
+  font-size: 20px;
+  margin: 0;
+}
+
+/* Phụ đề NFT */
+.nftSubtitle {
+  color: #777;
+  margin: 0;
+}
+
+/* Chi tiết giá */
+.priceDetails {
+  margin: 20px 0;
+}
+
+/* Mục giá */
+.nftPrice,
+.creatorRoyalties,
+.serviceFee,
+.networkFee {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+/* Nhãn giá */
+.priceLabel {
+  font-size: 16px;
+}
+
+/* Giá bên phải */
+.priceValueRight {
+  font-size: 16px;
+}
+
+/* Toggle thông tin giá */
+.priceInfoToggle {
+  cursor: pointer;
+  color: #0056d9;
+}
+
+/* Chi tiết thông tin giá */
+.priceInfoDetails {
+  margin: 10px 0;
+}
+
+/* Các hành động NFT */
+.nftActions {
+  display: flex;
+  justify-content: center;
+}
+
+/* Nút mua */
+.buyBtn {
+  padding: 12px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.buyBtn:hover {
+  background-color: #218838;
+}
+
+/* Media Queries để responsive */
+
+/* Khi màn hình nhỏ hơn 768px */
+@media (max-width: 768px) {
   .productCard {
-    display: flex;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    overflow: hidden;
-    background: rgb(241, 239, 239);
-    color: black;
+      flex-direction: column;
+      gap: 20px;
   }
-  
+
   .productImage {
-    flex: 1;
+      max-width: 100%;
+      margin-bottom: 20px;
   }
-  
+
   .productInfo {
-    flex: 2;
-    padding: 20px;
-    
+      flex: 1;
+      padding: 15px;
   }
-  
+
   .productTitle {
-    font-size: 24px;
-    margin: 0;
-  
+      font-size: 20px;
   }
-  
-  .productDescription {
-    font-size: 16px;
-    color: #555;
-  }
-  
+
   .productPrice {
-    font-size: 20px;
-    margin: 10px 0;
+      font-size: 18px;
   }
-  
-  .creatorInfo {
-    font-size: 14px;
-    color: #777;
-  }
-  
+
   .openPopupBtn {
-    margin-top: 10px;
-    padding: 12px 20px;
-    background-color: #0056d9;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+      width: 100%;
+      font-size: 16px;
   }
-  
-  .openPopupBtn:hover {
-    background-color: orangered;
-    color: #fff;
-  }
-  
-  .popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
+
   .popupContent {
-    background-color: white;
-    color: black;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 450px;
-    padding: 20px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    position: relative;
+      width: 90%;
   }
-  
-  .popupHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .popupHeader h2 {
-    font-size: 24px;
-    margin: 0;
-  }
-  
-  .closeBtn {
-    font-size: 30px;
-    cursor: pointer;
-  }
-  
-  .nftPopupBody {
-    text-align: left;
-  }
-  
-  .nftHeader {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .nftImage {
-    border-radius: 5px;
-  }
-  
-  .nftTitleGroup {
-    margin-left: 10px;
-  }
-  
+
   .nftTitle {
-    font-size: 20px;
-    margin: 0;
+      font-size: 18px;
   }
-  
-  .nftSubtitle {
-    color: #777;
-    margin: 0;
-  }
-  
-  .priceDetails {
-    margin: 20px 0;
-  }
-  
-  .nftPrice,
-  .creatorRoyalties,
-  .serviceFee,
-  .networkFee {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-  }
-  
-  .priceLabel {
-    font-size: 16px;
-  }
-  
-  .priceValueRight {
-    font-size: 16px;
-  }
-  
-  .priceInfoToggle {
-    cursor: pointer;
-    color: #0056d9;
-  }
-  
-  .priceInfoDetails {
-    margin: 10px 0;
-  }
-  
-  .nftActions {
-    display: flex;
-    justify-content: center;
-  }
-  
+
   .buyBtn {
-    padding: 12px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+      width: 100%;
+      font-size: 16px;
   }
-  
-  .buyBtn:hover {
-    background-color: #218838;
+}
+
+/* Khi màn hình nhỏ hơn 480px */
+@media (max-width: 480px) {
+  .productTitle {
+      font-size: 18px;
   }
-  
+
+  .productDescription {
+      font-size: 14px;
+  }
+
+  .productPrice {
+      font-size: 18px;
+  }
+
+  .creatorInfo {
+      font-size: 12px;
+  }
+
+  .openPopupBtn {
+      padding: 10px 15px;
+  }
+
+  .buyBtn {
+      padding: 10px 15px;
+      font-size: 16px;
+  }
+}

@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['gfjqzunwuzwdpeqqjqva.supabase.co'], // Thêm hostname của Supabase
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'gfjqzunwuzwdpeqqjqva.supabase.co',
+        pathname: '/storage/v1/object/public/marketplace-on-ton/**',
+      },
+    ],
   },
 };
 
