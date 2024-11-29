@@ -1,12 +1,13 @@
 'use client';
 
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { ReactNode } from 'react';
 
-const ClientProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+interface ClientProviderProps {
+  children: ReactNode;
+}
+
+const ClientProvider = ({ children }: ClientProviderProps) => {
   return (
     <TonConnectUIProvider manifestUrl="https://ton-dapp-two.vercel.app/tonconnect-manifest.json">
       {children}
