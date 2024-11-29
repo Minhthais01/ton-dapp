@@ -1,6 +1,6 @@
 'use client';
 
-import { TonConnectButton, TonConnectUIProvider } from '@tonconnect/ui-react';
+import { TonConnectButton } from '@tonconnect/ui-react';
 import BalanceUI from '../balance/page';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu'; // Import MUI Menu icon
@@ -38,37 +38,35 @@ const Header = () => {
   }, []); // Chỉ chạy một lần khi component mount
 
   return (
-    <TonConnectUIProvider manifestUrl='https://ton-dapp-two.vercel.app/tonconnect-manifest.json'>
-      <header className={styles.header}>
-        <div className={styles.logo}>
-          <Link href={`/product`}>GITN</Link>
+    <header className={styles.header}>
+      <div className={styles.logo}>
+        <Link href={`/product`}>GITN</Link>
+      </div>
+      <div className={styles.menuIcon} onClick={toggleMenu}>
+        {menuOpen ? <CloseIcon /> : <MenuIcon />}
+      </div>
+      <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
+        <div className={styles.searchBar}>
+          <SearchIcon className={styles.searchIcon} />
+          <input
+            type="text"
+            placeholder="Name or description"
+            className={styles.searchInput}
+          />
         </div>
-        <div className={styles.menuIcon} onClick={toggleMenu}>
-          {menuOpen ? <CloseIcon /> : <MenuIcon />}
-        </div>
-        <nav className={`${styles.nav} ${menuOpen ? styles.navOpen : ''}`}>
-          <div className={styles.searchBar}>
-            <SearchIcon className={styles.searchIcon} />
-            <input
-              type="text"
-              placeholder="Name or description"
-              className={styles.searchInput}
-            />
-          </div>
-          
-          <TonConnectButton className={styles.connectButton} />
-          <BalanceUI />
-          {/* Thêm IconButton giỏ hàng */}
-          <Link href="/cart">
-            <IconButton aria-label="cart">
-              <Badge badgeContent={cartItemCount} color="secondary" invisible={cartItemCount === 0}>
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-          </Link>
-        </nav>
-      </header>
-    </TonConnectUIProvider>
+        
+        <TonConnectButton className={styles.connectButton} />
+        <BalanceUI />
+        {/* Thêm IconButton giỏ hàng */}
+        <Link href="/cart">
+          <IconButton aria-label="cart">
+            <Badge badgeContent={cartItemCount} color="secondary" invisible={cartItemCount === 0}>
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+        </Link>
+      </nav>
+    </header>
   );
 };
 
