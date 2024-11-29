@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./components/header/page";
+import ClientProvider from "./components/ClientProvider/page"; // Import ClientProvider
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,15 +28,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header ></Header>
-        <main className="layout-container">{children}</main>
+        <ClientProvider>
+          <Header />
+          <main className="layout-container">{children}</main>
+        </ClientProvider>
       </body>
     </html>
   );

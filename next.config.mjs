@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-    domains: ['i.getgems.io'], // Thêm hostname ở đây
-  },
+  images: {
+    domains: ['i.getgems.io'],
+  }
 };
 
 export default nextConfig;

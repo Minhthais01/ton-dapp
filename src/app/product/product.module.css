@@ -85,7 +85,7 @@
 .label {
   position: absolute;
   left: 16px;
-  top: 16px;
+  top: 14px;
   font-size: 24px;
   cursor: pointer;
   z-index: 1;
