@@ -5,6 +5,7 @@ import Image from 'next/image';
 import styles from './cart.module.css';
 import Alert from '@mui/material/Alert';
 import { Snackbar, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { useTonAddress } from '@tonconnect/ui-react'; // Thêm import này
 
 interface Product {
   id: string;
@@ -20,7 +21,10 @@ export default function Cart() {
   const [alertMessage, setAlertMessage] = useState('');
   const [openDialog, setOpenDialog] = useState(false);
   const [dialogMessage, setDialogMessage] = useState('');
-  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+
+  // Sử dụng useTonAddress để lấy địa chỉ ví
+  const userFriendlyAddress = useTonAddress();
+  const rawAddress = useTonAddress(false);
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -29,10 +33,18 @@ export default function Cart() {
     const total = savedCart.reduce((sum: number, product: Product) => sum + parseFloat(product.price), 0);
     setTotalPrice(total);
 
-    // Lấy địa chỉ ví từ localStorage (giả định đã lưu trước đó)
-    const savedWalletAddress = localStorage.getItem('walletAddress');
-    setWalletAddress(savedWalletAddress);
-  }, []);
+    // Hiển thị địa chỉ ví trong console
+    if (userFriendlyAddress) {
+      console.log('User-friendly address:', userFriendlyAddress);
+    } else {
+      console.log('No wallet address found');
+    }
+    if (rawAddress) {
+      console.log('Raw address:', rawAddress);
+    } else {
+      console.log('No raw address found');
+    }
+  }, [userFriendlyAddress, rawAddress]); // Thêm các giá trị này vào dependencies để cập nhật khi thay đổi
 
   const handleRemoveProduct = (id: string) => {
     const updatedCart = cart.filter((product) => product.id !== id);
@@ -50,8 +62,8 @@ export default function Cart() {
   };
 
   const handlePaymentClick = () => {
-    if (walletAddress) {
-      console.log('Wallet Address:', walletAddress);
+    if (userFriendlyAddress) {
+      console.log('User-friendly Wallet Address:', userFriendlyAddress);
     } else {
       console.log('Wallet Address not found');
     }
