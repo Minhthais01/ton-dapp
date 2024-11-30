@@ -52,7 +52,7 @@ const SignIn = () => {
       if (response.ok) {
         alert('Registration successful!');
         // Sau khi đăng ký thành công, chuyển hướng về trang sản phẩm
-        router.push('/product');
+        router.push('/signin');
       } else {
         alert(data.message || 'Registration failed!');
       }
