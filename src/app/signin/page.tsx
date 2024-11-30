@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
 import styles from './signin.module.css';
 import { Google, Facebook, GitHub, LinkedIn } from '@mui/icons-material';
 
@@ -14,7 +14,7 @@ const SignIn = () => {
     confirmPassword: '',
   });
 
-  const router = useRouter(); // Khởi tạo router
+  const router = useRouter();
 
   const handleRegisterClick = () => setIsActive(true);
   const handleLoginClick = () => setIsActive(false);
@@ -31,7 +31,7 @@ const SignIn = () => {
       return;
     }
     try {
-      const response = await fetch('https://marketplace-on-ton-6xpf.onrender.com/auth/register', {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -43,7 +43,7 @@ const SignIn = () => {
       const data = await response.json();
       if (response.ok) {
         alert('Registration successful!');
-        router.push('/'); // Chuyển hướng về trang chủ
+        router.push('/');
       } else {
         alert(data.message || 'Registration failed!');
       }
@@ -55,7 +55,7 @@ const SignIn = () => {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await fetch('https://marketplace-on-ton-6xpf.onrender.com/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -65,10 +65,9 @@ const SignIn = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        // Lưu token vào localStorage
-        localStorage.setItem('authToken', data.token); // Giả sử server trả về token
+        localStorage.setItem('authToken', data.token);
         alert('Login successful!');
-        router.push('/'); // Chuyển hướng về trang chủ
+        router.push('/');
       } else {
         alert(data.message || 'Login failed!');
       }
