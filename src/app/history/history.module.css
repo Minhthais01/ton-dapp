@@ -1,0 +1,81 @@
+.transaction-history {
+  padding: 20px;
+  max-width: 1200px;  /* Tăng chiều rộng tối đa của bảng */
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  padding-top: 120px;
+
+}
+.tieude{
+  font-size: 25px;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+.h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.th, .td {
+  padding: 15px;  /* Tăng padding để bảng to hơn */
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+  font-size: 20px;  /* Tăng cỡ chữ tiêu đề trong bảng */
+}
+
+.td {
+  font-size: 16px;  /* Cỡ chữ cho các ô dữ liệu */
+}
+
+.tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .transaction-history {
+    padding: 10px;
+  }
+
+  .h1 {
+    font-size: 20px;  /* Giảm kích thước tiêu đề trên thiết bị di động */
+  }
+
+  .table {
+    font-size: 14px;  /* Giảm cỡ chữ của bảng trên thiết bị nhỏ */
+  }
+
+  .th, .td {
+    padding: 10px;  /* Giảm padding trên thiết bị di động */
+  }
+
+  .th {
+    font-size: 18px;  /* Giảm cỡ chữ tiêu đề bảng */
+  }
+}
+
+@media (max-width: 480px) {
+  .table {
+    font-size: 12px;  /* Giảm cỡ chữ bảng cho các thiết bị nhỏ hơn */
+  }
+
+  .th, .td {
+    padding: 8px;  /* Giảm padding thêm một chút cho các thiết bị nhỏ */
+  }
+}

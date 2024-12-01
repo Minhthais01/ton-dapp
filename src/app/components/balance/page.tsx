@@ -64,14 +64,14 @@ const BalanceUI = () => {
     try {
       const response = await fetch(url, { method: 'GET', headers: { accept: 'application/json' } });
       const res = await response.json();
-      console.log('API response:', res); // In ra JSON phản hồi để kiểm tra
+      console.log('API response:', res); 
 
       // Lấy số dư và tên từ JSON phản hồi
       const balance = res.balance;
       const jettonName = res.jetton?.name;
 
       if (balance && jettonName) {
-        setJettonBalance(parseFloat(balance) / 1e9); // Chuyển đổi số dư nếu cần
+        setJettonBalance(parseFloat(balance) / 1e9); 
         setJettonName(jettonName);
       } else {
         console.warn('Balance or metadata not found in response');

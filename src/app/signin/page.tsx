@@ -104,14 +104,7 @@ const SignIn = () => {
                 <a href="#" className={styles.icon}><LinkedIn /></a>
               </div>
               <span>or use your email for registration</span>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
+          
               <input
                 type="email"
                 name="email"
