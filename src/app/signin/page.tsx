@@ -8,61 +8,83 @@ import { Google, Facebook, GitHub, LinkedIn } from '@mui/icons-material';
 const SignIn = () => {
   const [isActive, setIsActive] = useState(false);
   const [formData, setFormData] = useState({
-    name: '',
     email: '',
     password: '',
-    confirmPassword: '',
+    confirm_password: '',
   });
-  const [userEmail, setUserEmail] = useState<string | null>(null); // Lưu email người dùng sau khi đăng nhập
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
 
-  // Kiểm tra xem người dùng đã đăng nhập hay chưa khi load trang
+  // Kiểm tra xem người dùng đã đăng nhập hay chưa
   useEffect(() => {
     const storedEmail = localStorage.getItem('userEmail');
     if (storedEmail) {
       setUserEmail(storedEmail); // Nếu có email trong localStorage, hiển thị email người dùng
     }
-  }, []); // Chạy một lần khi component mount
+  }, []);
 
+  // Hàm chuyển tab giữa đăng nhập và đăng ký
   const handleRegisterClick = () => setIsActive(true);
   const handleLoginClick = () => setIsActive(false);
 
+  // Hàm cập nhật giá trị input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
-
+  
+  // Hàm xử lý đăng ký
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
+  
+    // Kiểm tra nếu mật khẩu khớp
+    if (formData.password !== formData.confirm_password) {
       alert('Passwords do not match!');
       return;
     }
+  
+    // Kiểm tra định dạng email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(formData.email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+  
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/user/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: formData.name,
           email: formData.email,
           password: formData.password,
+          confirm_password: formData.confirm_password,
         }),
       });
+  
       const data = await response.json();
+  
       if (response.ok) {
         alert('Registration successful!');
-        // Sau khi đăng ký thành công, chuyển hướng về trang sản phẩm
-        router.push('/signin');
+        router.push('/signin');  // Chuyển hướng sau khi đăng ký thành công
       } else {
-        alert(data.message || 'Registration failed!');
+        alert(data?.message || 'Registration failed!');
       }
     } catch (error) {
       console.error('Sign Up Error:', error);
+      alert('An error occurred. Please try again later.');
     }
   };
+  
+  
+  
 
+  // Hàm xử lý đăng nhập
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+  
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -72,28 +94,34 @@ const SignIn = () => {
           password: formData.password,
         }),
       });
+  
       const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('authToken', data.token);
-        localStorage.setItem('userEmail', formData.email); // Lưu email vào localStorage
-        setUserEmail(formData.email); // Cập nhật email vào state để hiển thị trên giao diện
+      console.log('Login Response:', data);  // Log phản hồi API
+  
+      if (!response.ok) {
+        // Hiển thị lỗi chi tiết từ backend nếu có
+        alert(data?.message || 'Login failed!');
+        return;
+      }
+  
+      // Kiểm tra nếu data là một đối tượng chứa token
+      if (data && data.token) {
+        const token = typeof data.token === 'string' ? data.token : JSON.stringify(data.token);
+        localStorage.setItem('authToken', token);
         alert('Login successful!');
-        
-        // Dùng router.replace để tải lại trang sản phẩm mà không có lịch sử trình duyệt
-        router.push('/product'); 
+        router.push('/product');  // Chuyển hướng đến trang sản phẩm
       } else {
-        alert(data.message || 'Login failed!');
+        alert('Login failed! Token missing.');
       }
     } catch (error) {
       console.error('Sign In Error:', error);
+      alert('There was an error signing in. Please try again later.');
     }
   };
   
-
   return (
     <div className={styles.body}>
       <div className={`${styles.container} ${isActive ? styles.active : ''}`}>
-        {/* Các form đăng nhập và đăng ký */}
         <>
           {/* Sign Up Form */}
           <div className={`${styles.formContainer} ${styles.signUp}`}>
@@ -106,14 +134,6 @@ const SignIn = () => {
                 <a href="#" className={styles.icon}><LinkedIn /></a>
               </div>
               <span>or use your email for registration</span>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
               <input
                 type="email"
                 name="email"
@@ -132,9 +152,9 @@ const SignIn = () => {
               />
               <input
                 type="password"
-                name="confirmPassword"
+                name="confirm_password"
                 placeholder="Confirm Password"
-                value={formData.confirmPassword}
+                value={formData.confirm_password}
                 onChange={handleInputChange}
                 required
               />
