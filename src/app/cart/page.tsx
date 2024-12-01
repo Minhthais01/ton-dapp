@@ -115,7 +115,8 @@ export default function Cart() {
       return `${productDetails}\n` +
              `Total Products: ${cart.length}\n` +
              `Total Price: ${totalPrice} GITN\n` +
-             `Recipient Address: ${recipientAddress}`;
+             `Recipient Address: ${recipientAddress}\n`+
+             `Sender Address: ${userFriendlyAddress}`;
     };
   
     const forwardPayload = beginCell()
