@@ -39,7 +39,7 @@ const SignIn = () => {
       return;
     }
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/user/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -52,7 +52,7 @@ const SignIn = () => {
       if (response.ok) {
         alert('Registration successful!');
         // Sau khi đăng ký thành công, chuyển hướng về trang sản phẩm
-        router.push('/product');
+        router.push('/signin');
       } else {
         alert(data.message || 'Registration failed!');
       }
@@ -88,8 +88,6 @@ const SignIn = () => {
       console.error('Sign In Error:', error);
     }
   };
-  
-
   return (
     <div className={styles.body}>
       <div className={`${styles.container} ${isActive ? styles.active : ''}`}>

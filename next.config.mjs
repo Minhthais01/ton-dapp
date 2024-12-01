@@ -9,14 +9,14 @@ const nextConfig = {
       },
     ],
   },
-    async rewrites() {
-      return [
-        {
-          source: '/api/:path*', // Đường dẫn proxy
-          destination: 'https://marketplace-on-ton-6xpf.onrender.com/:path*', // Địa chỉ API gốc
-        },
-      ];
-    },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://marketplace-on-ton-6xpf.onrender.com/:path*',
+      },
+    ];
+  },
   };
 
 export default nextConfig;
