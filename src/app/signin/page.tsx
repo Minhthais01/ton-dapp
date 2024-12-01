@@ -76,7 +76,7 @@ const SignIn = () => {
       } else {
         // Các lỗi khác
         const errorMessage = data?.message || 'Registration failed!';
-        alert(`Error: ${errorMessage}`);
+        alert(` ${errorMessage}`);
       }
     } catch (error) {
       console.error('Sign Up Error:', error);
@@ -85,51 +85,40 @@ const SignIn = () => {
   };
   
 
-  // Hàm xử lý đăng nhập
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-
-      const data = await response.json();
-      console.log('Login Response:', data);  // Log phản hồi API
-
-      useEffect(() => {
-        const storedEmail = localStorage.getItem('userEmail');
-        console.log('Stored email from localStorage:', storedEmail);  // Kiểm tra lại giá trị email
-        if (storedEmail) {
-          setUserEmail(storedEmail);  // Cập nhật lại userEmail
-        }
-      }, []);
-
-      if (!response.ok) {
-        // Nếu không thành công, hiển thị thông báo lỗi từ API trong alert
-        alert(data?.message || 'Login failed!');
-        return;
-      }
-
-      // Kiểm tra nếu data là một đối tượng chứa token
-      if (data && data.token) {
-        const token = typeof data.token === 'string' ? data.token : JSON.stringify(data.token);
-        localStorage.setItem('authToken', token);
-        alert('Login successful!');
-        router.push('/product');  // Chuyển hướng đến trang sản phẩm
-      } else {
-        alert('Login failed! Token missing.');
-      }
-    } catch (error) {
-      console.error('Sign In Error:', error);
-      alert('There was an error signing in. Please try again later.');
+ // Hàm xử lý đăng nhập
+ const handleSignIn = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: formData.email,
+        password: formData.password,
+      }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      const userLogin = {
+        email: formData.email,
+        name: data.name, // Lưu tên người dùng từ API vào localStorage
+        token: data.token,
+        
+      };
+      localStorage.setItem('userLogin', JSON.stringify(userLogin)); // Lưu thông tin người dùng vào localStorage
+      setUserEmail(formData.email); // Cập nhật email vào state để hiển thị
+      localStorage.setItem('authToken', data.token);
+      localStorage.setItem('userEmail', formData.email); // Lưu email vào localStorage
+      setUserEmail(formData.email); // Cập nhật email vào state để hiển thị trên giao diện
+      alert('Login successful!');
+      router.push('/');
+    } else {
+      alert(data.message || 'Login failed!');
     }
-  };
+  } catch (error) {
+    console.error('Sign In Error:', error);
+  }
+};
   
   return (
     <div className={styles.body}>

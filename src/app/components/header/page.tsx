@@ -42,11 +42,21 @@ const Header = () => {
   // Cập nhật email ngay khi trang được load (hoặc khi có sự thay đổi về authToken)
   useEffect(() => {
     const authToken = localStorage.getItem('authToken');
-    if (authToken) {
-      // Lấy email từ localStorage khi có authToken
-      const email = localStorage.getItem('userEmail');
-      setUserEmail(email); // Cập nhật trực tiếp email vào state
+    const email = localStorage.getItem('userEmail');
+    if (authToken && email) {
+      setUserEmail(email); // Cập nhật trực tiếp email vào state nếu đã đăng nhập
     }
+
+    // Lắng nghe sự thay đổi trong localStorage và cập nhật email
+    const handleStorageChange = () => {
+      const storedEmail = localStorage.getItem('userEmail');
+      setUserEmail(storedEmail); // Cập nhật khi có thay đổi trong localStorage
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    // Cleanup event listener khi component unmount
+    return () => window.removeEventListener('storage', handleStorageChange);
   }, []); // Chạy một lần khi component mount
 
   const handleLogout = () => {
@@ -93,15 +103,15 @@ const Header = () => {
 
           {/* Hiển thị email người dùng khi đăng nhập */}
           {userEmail ? (
-          <div className={styles.userInfo}>
-            <span onClick={toggleDropdown} className={styles.userEmail}>{userEmail}</span>
-            {isDropdownOpen && (
-              <div className={styles.dropdown}>
-                <button onClick={handleLogout}>Logout</button>
-              </div>
-            )}
-          </div>
-        ) : (
+            <div className={styles.userInfo}>
+              <span onClick={toggleDropdown} className={styles.userEmail}><a>Welcome, {userEmail}</a></span>
+              {isDropdownOpen && (
+                <div className={styles.dropdown}>
+                  <button onClick={handleLogout}>Logout</button>
+                </div>
+              )}
+            </div>
+          ) : (
             <Link href="/signin">
               <p>Login</p>
             </Link>
