@@ -93,15 +93,15 @@ const Header = () => {
 
           {/* Hiển thị email người dùng khi đăng nhập */}
           {userEmail ? (
-            <div className={styles.userInfo}>
-              <span onClick={toggleDropdown} className={styles.userEmail}>{userEmail}</span>
-              {isDropdownOpen && (
-                <div className={styles.dropdown}>
-                  <button onClick={handleLogout}>Logout</button>
-                </div>
-              )}
-            </div>
-          ) : (
+          <div className={styles.userInfo}>
+            <span onClick={toggleDropdown} className={styles.userEmail}>{userEmail}</span>
+            {isDropdownOpen && (
+              <div className={styles.dropdown}>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
+        ) : (
             <Link href="/signin">
               <p>Login</p>
             </Link>

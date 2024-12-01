@@ -64,15 +64,18 @@ const SignIn = () => {
         }),
       });
   
-      // Parse JSON ngay cả khi response là lỗi
       const data = await response.json();
   
-      if (response.ok) {
+      // Kiểm tra mã trạng thái HTTP của phản hồi
+      if (response.status === 200) {
         alert('Registration successful!');
         router.push('/signin'); // Chuyển hướng sau khi đăng ký thành công
+      } else if (response.status === 409) {
+        // Email đã tồn tại
+        alert('This email is already registered. Please use another one.');
       } else {
-        // Lấy thông báo lỗi từ API
-        const errorMessage = data?.message || 'Registration failed!';  // Dùng message từ API nếu có
+        // Các lỗi khác
+        const errorMessage = data?.message || 'Registration failed!';
         alert(`Error: ${errorMessage}`);
       }
     } catch (error) {
@@ -98,6 +101,14 @@ const SignIn = () => {
 
       const data = await response.json();
       console.log('Login Response:', data);  // Log phản hồi API
+
+      useEffect(() => {
+        const storedEmail = localStorage.getItem('userEmail');
+        console.log('Stored email from localStorage:', storedEmail);  // Kiểm tra lại giá trị email
+        if (storedEmail) {
+          setUserEmail(storedEmail);  // Cập nhật lại userEmail
+        }
+      }, []);
 
       if (!response.ok) {
         // Nếu không thành công, hiển thị thông báo lỗi từ API trong alert
