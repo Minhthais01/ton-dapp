@@ -64,27 +64,28 @@ const SignIn = () => {
         }),
       });
   
+      // Parse JSON ngay cả khi response là lỗi
       const data = await response.json();
   
       if (response.ok) {
         alert('Registration successful!');
-        router.push('/signin');  // Chuyển hướng sau khi đăng ký thành công
+        router.push('/signin'); // Chuyển hướng sau khi đăng ký thành công
       } else {
-        alert(data?.message || 'Registration failed!');
+        // Lấy thông báo lỗi từ API
+        const errorMessage = data?.message || 'Registration failed!';  // Dùng message từ API nếu có
+        alert(`Error: ${errorMessage}`);
       }
     } catch (error) {
       console.error('Sign Up Error:', error);
-      alert('An error occurred. Please try again later.');
+      alert('An unexpected error occurred. Please try again later.');
     }
   };
-  
-  
   
 
   // Hàm xử lý đăng nhập
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
@@ -94,16 +95,16 @@ const SignIn = () => {
           password: formData.password,
         }),
       });
-  
+
       const data = await response.json();
       console.log('Login Response:', data);  // Log phản hồi API
-  
+
       if (!response.ok) {
-        // Hiển thị lỗi chi tiết từ backend nếu có
+        // Nếu không thành công, hiển thị thông báo lỗi từ API trong alert
         alert(data?.message || 'Login failed!');
         return;
       }
-  
+
       // Kiểm tra nếu data là một đối tượng chứa token
       if (data && data.token) {
         const token = typeof data.token === 'string' ? data.token : JSON.stringify(data.token);
